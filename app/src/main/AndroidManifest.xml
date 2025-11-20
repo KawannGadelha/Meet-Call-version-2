@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChamadaDeVideoTeste">
         <activity
+            android:name=".ConferenceActivity"
+            android:theme="@style/Theme.MyTheme"
+            android:exported="false" />
+        <activity
             android:name=".CallActivity"
             android:exported="false" />
         <activity

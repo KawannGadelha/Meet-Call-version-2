@@ -1,5 +1,6 @@
 package com.example.chamadadevideoteste
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +39,8 @@ fun MeetingScreen() {
     // Estados para armazenar os valores dos campos de texto
     var meetingId by remember { mutableStateOf("") }
     var userName by remember { mutableStateOf("") }
+
+    val context = LocalContext.current // Usamos 'val' para contexto, já que não muda
 
     // Coluna para alinhar os elementos verticalmente na tela
     Column(
@@ -87,7 +91,14 @@ fun MeetingScreen() {
 
                 // Botão "Join Meeting"
                 Button(
-                    onClick = { /* LÓGICA PARA ENTRAR NA REUNIÃO AQUI */ },
+                    onClick = {
+                        // Lógica para ENTRAR na reunião existente
+                        val intent = Intent(context, ConferenceActivity::class.java)
+                        intent.putExtra("MEETING_ID", meetingId) // Usando o ID digitado
+                        intent.putExtra("USERNAME", userName)
+                        context.startActivity(intent)
+
+                        /* LÓGICA PARA ENTRAR NA REUNIÃO AQUI */ },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007BFF)) // Cor do botão (Azul)
@@ -99,7 +110,14 @@ fun MeetingScreen() {
 
                 // Botão "Create Meeting"
                 Button(
-                    onClick = { /* LÓGICA PARA CRIAR REUNIÃO AQUI */ },
+                    onClick = {
+                        // LÓGICA CORRIGIDA: Criar um ID aleatório e iniciar a ConferenceActivity
+                        val randomMeetingId = (1..10).map { ('0'..'9').random() }.joinToString("")
+                        val intent = Intent(context, ConferenceActivity::class.java)
+                        intent.putExtra("MEETING_ID", randomMeetingId) // Usando um ID aleatório
+                        intent.putExtra("USERNAME", userName)
+                        context.startActivity(intent)
+                    },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Gray) // Cor secundária
